@@ -1,28 +1,33 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+from tkinter import Tk, filedialog
 
-# Prompt user to enter the file names for the left headphone
+# Initialize the Tkinter root window
+root = Tk()
+root.withdraw()  # Hide the root window
+
+# Prompt user to select the file names for the left headphone
 left_file_names = []
 for i in range(2):
     while True:
-        file_name = input("Enter the name of data file for the left headphone {}: ".format(i + 1))
-        if os.path.isfile(file_name):
-            left_file_names.append(file_name)
+        file_path = filedialog.askopenfilename(title="Select data file for the left headphone {}".format(i + 1))
+        if os.path.isfile(file_path):
+            left_file_names.append(file_path)
             break
         else:
-            print("Invalid file name or file doesn't exist. Please try again.")
+            print("Invalid file or file doesn't exist. Please try again.")
 
-# Prompt user to enter the file names for the right headphone
+# Prompt user to select the file names for the right headphone
 right_file_names = []
 for i in range(2):
     while True:
-        file_name = input("Enter the name of data file for the right headphone {}: ".format(i + 1))
-        if os.path.isfile(file_name):
-            right_file_names.append(file_name)
+        file_path = filedialog.askopenfilename(title="Select data file for the right headphone {}".format(i + 1))
+        if os.path.isfile(file_path):
+            right_file_names.append(file_path)
             break
         else:
-            print("Invalid file name or file doesn't exist. Please try again.")
+            print("Invalid file or file doesn't exist. Please try again.")
 
 # Prompt user to enter the offset magnitude
 while True:
@@ -75,8 +80,12 @@ for file_name in right_file_names:
 # Plotting the graph
 colors = ['b', 'r', 'g', 'm']  # Color for each line
 for i in range(2):
-    plt.plot(left_frequencies[i], left_magnitudes[i], '{}-'.format(colors[i]), label='Left - {}'.format(left_file_names[i]))
-    plt.plot(right_frequencies[i], right_magnitudes[i], '{}-'.format(colors[i+2]), label='Right - {}'.format(right_file_names[i]))
+    # Get the file name from the full path
+    left_file_name = os.path.basename(left_file_names[i])
+    right_file_name = os.path.basename(right_file_names[i])
+    
+    plt.plot(left_frequencies[i], left_magnitudes[i], '{}-'.format(colors[i]), label='Left - {}'.format(left_file_name))
+    plt.plot(right_frequencies[i], right_magnitudes[i], '{}-'.format(colors[i+2]), label='Right - {}'.format(right_file_name))
 
 # Calculate the marker frequencies
 marker_frequencies = [20]
@@ -92,11 +101,11 @@ for frequency in marker_frequencies:
     plt.text(frequency, plt.ylim()[1] + 5, '{} Hz'.format(frequency), ha='center')
 
 plt.xlabel('Frequency (Hz)')
-plt.ylabel('Magnitude')
-plt.title('Frequency vs Magnitude')
+plt.ylabel('Magnitude (dB)')
+plt.title('Audio Wave Graph Tool')
 plt.legend()
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.xlim(20, 22000)  # Set x-axis limits
+plt.xlim(20, 20000)  # Set x-axis limits
 plt.ylim(-50 + offset, 50 + offset)  # Set y-axis limits with offset
 plt.grid(True)
 plt.show()
