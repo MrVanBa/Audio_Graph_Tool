@@ -1,20 +1,40 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 # Prompt user to enter the file names for the left headphone
 left_file_names = []
 for i in range(2):
-    file_name = input("Enter the name of data file for the left headphone {}: ".format(i + 1))
-    left_file_names.append(file_name)
+    while True:
+        file_name = input("Enter the name of data file for the left headphone {}: ".format(i + 1))
+        if os.path.isfile(file_name):
+            left_file_names.append(file_name)
+            break
+        else:
+            print("Invalid file name or file doesn't exist. Please try again.")
 
 # Prompt user to enter the file names for the right headphone
 right_file_names = []
 for i in range(2):
-    file_name = input("Enter the name of data file for the right headphone {}: ".format(i + 1))
-    right_file_names.append(file_name)
+    while True:
+        file_name = input("Enter the name of data file for the right headphone {}: ".format(i + 1))
+        if os.path.isfile(file_name):
+            right_file_names.append(file_name)
+            break
+        else:
+            print("Invalid file name or file doesn't exist. Please try again.")
 
 # Prompt user to enter the offset magnitude
-offset = float(input("Enter the offset magnitude: "))
+while True:
+    offset_str = input("Enter the offset magnitude: ")
+    if offset_str.strip() != "":
+        try:
+            offset = float(offset_str)
+            break
+        except ValueError:
+            print("Invalid offset magnitude. Please enter a valid number.")
+    else:
+        print("Offset magnitude cannot be empty. Please try again.")
 
 # Initialize lists for frequency and magnitude data
 left_frequencies = []
