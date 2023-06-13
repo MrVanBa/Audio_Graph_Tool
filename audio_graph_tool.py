@@ -77,12 +77,26 @@ colors = ['b', 'r', 'g', 'm']  # Color for each line
 for i in range(2):
     plt.plot(left_frequencies[i], left_magnitudes[i], '{}-'.format(colors[i]), label='Left - {}'.format(left_file_names[i]))
     plt.plot(right_frequencies[i], right_magnitudes[i], '{}-'.format(colors[i+2]), label='Right - {}'.format(right_file_names[i]))
+
+# Calculate the marker frequencies
+marker_frequencies = [20]
+x = 0
+while 20 * 5 ** x <= 22000:
+    marker_frequencies.append(20 * 5 ** x)
+    x += 1
+marker_frequencies.append(20000)  # Add 22000 Hz to the marker frequencies
+
+# Add marker lines at frequency borders and marker frequencies
+for frequency in marker_frequencies:
+    plt.axvline(x=frequency, color='k', linestyle='--', alpha=0.5)
+    plt.text(frequency, plt.ylim()[1] + 5, '{} Hz'.format(frequency), ha='center')
+
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Magnitude')
-plt.title('Audio Graph Tool')
+plt.title('Frequency vs Magnitude')
 plt.legend()
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.xlim(20, 20000)  # Set x-axis limits
+plt.xlim(20, 22000)  # Set x-axis limits
 plt.ylim(-50 + offset, 50 + offset)  # Set y-axis limits with offset
 plt.grid(True)
 plt.show()
